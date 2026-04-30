@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daily Economic Brief</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --blue: #2563eb;
+      --blue-soft: #eaf1ff;
+      --shadow: 0 18px 45px rgba(31, 41, 55, 0.08);
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Noto Sans KR", "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #dbeafe 0, transparent 34%), var(--bg);
+      color: var(--ink);
+      line-height: 1.65;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 28px;
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 28px;
+    }
+
+    aside {
+      position: sticky;
+      top: 24px;
+      height: calc(100vh - 48px);
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(229, 231, 235, 0.9);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      color: white;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 15px;
+      line-height: 1.25;
+    }
+
+    .brand span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    nav {
+      display: grid;
+      gap: 8px;
+    }
+
+    nav a {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 14px;
+      color: #374151;
+      font-size: 15.5px;
+      transition: 0.18s ease;
+    }
+
+    nav a:hover,
+    .report-date-pill:hover,
+    .report-date-pill.active {
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+
+    .side-note {
+      margin-top: 24px;
+      padding: 16px;
+      border-radius: 18px;
+      background: #f9fafb;
+      border: 1px solid var(--line);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .report-index-box {
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .report-index-box h4 {
+      margin: 0 0 12px;
+      font-size: 14px;
+      color: #374151;
+    }
+
+    .report-date-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .report-date-pill {
+      display: block;
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #f9fafb;
+      border-radius: 12px;
+      padding: 10px 12px;
+      text-align: left;
+      font-size: 14px;
+      color: #374151;
+      cursor: pointer;
+      transition: 0.18s ease;
+    }
+
+    .report-date-pill .date-main {
+      font-weight: 700;
+      display: block;
+    }
+
+    main {
+      min-width: 0;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      min-height: 320px;
+      padding: 42px;
+      border-radius: 34px;
+      color: white;
+      background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 52%, #7c3aed 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -120px;
+      top: -120px;
+      width: 360px;
+      height: 360px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      font-size: 13px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin: 0 0 18px;
+      font-size: clamp(34px, 6vw, 64px);
+      line-height: 1.04;
+      letter-spacing: -0.06em;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 760px;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 18px;
+    }
+
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    .hero-stat {
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .hero-stat b {
+      display: block;
+      font-size: 23px;
+      margin-bottom: 4px;
+    }
+
+    .hero-stat span {
+      color: rgba(255, 255, 255, 0.74);
+      font-size: 13px;
+    }
+
+    section {
+      margin-top: 26px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin: 0 0 14px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 26px;
+      letter-spacing: -0.04em;
+    }
+
+    .section-title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(229, 231, 235, 0.9);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      white-space: pre-line;
+    }
+
+    .card.compact {
+      max-height: 420px;
+      overflow-y: auto;
+    }
+
+    .market-summary {
+      font-size: 17px;
+      min-height: auto;
+    }
+
+    .insight-block {
+      margin-top: 14px;
+      padding: 18px 20px;
+    }
+
+    .insight-block h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .insight-section {
+      padding: 10px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .insight-section:first-of-type {
+      border-top: 0;
+      padding-top: 4px;
+    }
+
+    .insight-section b {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: #4b5563;
+      font-weight: 700;
+    }
+
+    .insight-section .simple-list {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .insight-section .simple-list li {
+      margin-bottom: 4px;
+      line-height: 1.45;
+      color: #4b5563;
+      font-size: 14px;
+    }
+
+    .risk-list,
+    .watch-list,
+    .asset-grid,
+    .category-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .risk-list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .risk-card {
+      padding: 18px;
+      border-radius: 20px;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+    }
+
+    .risk-card b {
+      color: #c2410c;
+    }
+
+    .risk-card p,
+    .watch-card p,
+    .category-card p,
+    .asset-card p {
+      margin: 8px 0 0;
+      color: #4b5563;
+      font-size: 14px;
+      white-space: pre-line;
+    }
+
+    .category-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .category-card,
+    .asset-card,
+    .watch-card {
+      padding: 19px;
+      border-radius: 20px;
+      background: #f9fafb;
+      border: 1px solid var(--line);
+    }
+
+    .category-card h3,
+    .asset-card h3,
+    .watch-card h3 {
+      margin: 0;
+      font-size: 17px;
+      letter-spacing: -0.03em;
+    }
+
+    .asset-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .asset-card .badge {
+      display: inline-flex;
+      margin-bottom: 9px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #4f46e5;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: capitalize;
+    }
+
+    .watch-list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .simple-list {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .simple-list li {
+      margin-bottom: 8px;
+      color: #4b5563;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .footer-card {
+      margin: 28px 0 8px;
+      padding: 22px;
+      border-radius: var(--radius);
+      background: #111827;
+      color: white;
+    }
+
+    .footer-card p {
+      margin: 8px 0 0;
+      color: rgba(255, 255, 255, 0.68);
+      font-size: 14px;
+    }
+
+    .error-box {
+      margin-top: 24px;
+      padding: 18px;
+      border-radius: 18px;
+      background: #fff1f2;
+      border: 1px solid #fecdd3;
+      color: #9f1239;
+      white-space: pre-line;
+    }
+
+    @media (max-width: 1180px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        position: relative;
+        height: auto;
+      }
+
+      nav {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .asset-grid,
+      .category-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .risk-list,
+      .watch-list {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .layout {
+        padding: 14px;
+      }
+
+      .hero {
+        padding: 28px;
+      }
+
+      .hero-grid,
+      .asset-grid,
+      .category-grid,
+      nav {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside>
+      <div class="brand">
+        <div class="logo">E</div>
+        <div>
+          <strong>Economic News<br />RAG Brief</strong>
+          <span>LLM × RAG 기반 일간 경제 보고서</span>
+        </div>
+      </div>
+
+      <nav>
+        <a href="#overview">오늘의 시장 개요 <span>01</span></a>
+        <a href="#macro">거시경제 흐름 핵심 <span>02</span></a>
+        <a href="#industry">기업 및 산업 동향 <span>03</span></a>
+        <a href="#categories">섹터별 이슈 정리 <span>04</span></a>
+        <a href="#assets">자산군별 영향 분석 <span>05</span></a>
+        <a href="#risks">핵심 리스크 요인 <span>06</span></a>
+        <a href="#checkpoints">내일 체크포인트 <span>07</span></a>
+        <a href="#digest">기사별 요약 <span>08</span></a>
+        <a href="#rag-summary">RAG 기반 통합 정리 <span>09</span></a>
+        <a href="#narrative">오늘의 종합 해석 <span>10</span></a>
+      </nav>
+
+      <div class="report-index-box">
+        <h4>보고서 목록</h4>
+        <div class="report-date-list" id="report-date-list"></div>
+      </div>
+
+      <div class="side-note">
+        오늘의 경제 흐름을 한 페이지에서 빠르게 확인할 수 있도록 핵심 내용만 정리했습니다.
+      </div>
+    </aside>
+
+    <main>
+      <header class="hero">
+        <div class="hero-content">
+          <div class="eyebrow" id="hero-date"></div>
+          <h1>오늘의 경제 흐름을<br />한 페이지에서 파악합니다.</h1>
+          <p>
+            오늘의 주요 경제 이슈를 시장 흐름, 산업 동향, 자산군별 영향, 리스크와 체크포인트 중심으로 정리했습니다.
+            바쁜 이용자가 여러 기사를 따로 읽지 않아도 하루의 경제 흐름을 빠르게 파악할 수 있도록 구성했습니다.
+          </p>
+        </div>
+        <div class="hero-grid">
+          <div class="hero-stat"><b id="stat-category-count">0</b><span>경제·기업·증권·부동산 카테고리</span></div>
+          <div class="hero-stat"><b id="stat-asset-count">0</b><span>주식·채권·예금·부동산·환율 관점</span></div>
+          <div class="hero-stat"><b id="stat-risk-count">0</b><span>핵심 리스크 요약</span></div>
+          <div class="hero-stat"><b id="stat-checkpoint-count">0</b><span>오늘 꼭 확인할 체크포인트</span></div>
+        </div>
+      </header>
+
+      <section id="overview">
+        <div class="section-title">
+          <h2 id="overview-title"></h2>
+          <p>시장 전반의 핵심 흐름 요약</p>
+        </div>
+
+        <div class="card compact market-summary" id="market-overview"></div>
+
+        <div class="card insight-block">
+          <h3 style="margin-top:0">오늘의 해석</h3>
+
+          <div class="insight-section">
+            <b>공통 주제</b>
+            <div id="cross-themes"></div>
+          </div>
+
+          <div class="insight-section">
+            <b>정책 관전 포인트</b>
+            <div id="policy-watch"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="macro">
+        <div class="section-title">
+          <h2>거시경제 흐름 핵심</h2>
+          <p>거시 변수와 금융 조건의 변화</p>
+        </div>
+        <div class="card compact" id="macro-analysis"></div>
+      </section>
+
+      <section id="industry">
+        <div class="section-title">
+          <h2>기업 및 산업 동향</h2>
+          <p>산업 전반의 구조 변화와 기업 활동</p>
+        </div>
+        <div class="card compact" id="industry-market-trends"></div>
+      </section>
+
+      <section id="categories">
+        <div class="section-title">
+          <h2>섹터별 이슈 정리</h2>
+          <p>경제·기업·증권·부동산 흐름을 한눈에 정리했습니다</p>
+        </div>
+        <div class="category-grid" id="category-grid"></div>
+      </section>
+
+      <section id="assets">
+        <div class="section-title">
+          <h2>자산군별 영향 분석</h2>
+          <p>시장 이해를 위한 참고 정보</p>
+        </div>
+        <div class="asset-grid" id="asset-grid"></div>
+      </section>
+
+      <section id="risks">
+        <div class="section-title">
+          <h2>핵심 리스크 요인</h2>
+          <p>오늘 반복적으로 등장한 위험 요인</p>
+        </div>
+        <div class="risk-list" id="risk-list"></div>
+      </section>
+
+      <section id="checkpoints">
+        <div class="section-title">
+          <h2>내일 체크포인트</h2>
+          <p>다음 보고서에서 이어서 볼 지표</p>
+        </div>
+        <div class="watch-list" id="checkpoints-list"></div>
+      </section>
+
+      <section id="digest">
+        <div class="section-title">
+          <h2>기사별 요약</h2>
+          <p>카테고리별 핵심 기사 정리</p>
+        </div>
+        <div class="card compact" id="article-digest"></div>
+      </section>
+
+      <section id="rag-summary">
+        <div class="section-title">
+          <h2>RAG 기반 통합 정리</h2>
+          <p>외부 정보와 배경 맥락을 반영한 종합 요약</p>
+        </div>
+        <div class="card compact" id="rag-integrated-summary"></div>
+      </section>
+
+      <section id="narrative">
+        <div class="section-title">
+          <h2>오늘의 종합 해석</h2>
+          <p>하루의 경제 흐름을 종합한 서술형 브리핑</p>
+        </div>
+        <div class="card compact" id="final-narrative-report"></div>
+      </section>
+
+      <div class="footer-card">
+        <strong>안내</strong>
+        <p>
+          본 페이지는 경제 뉴스와 관련 정보를 바탕으로 한 참고용 요약입니다.
+          투자 권유가 아니며, 실제 의사결정에는 추가 검증과 최신 데이터 확인이 필요합니다.
+        </p>
+      </div>
+
+      <div class="error-box" id="error-box" style="display:none;"></div>
+    </main>
+  </div>
+
+  <script>
+    async function loadReportIndex() {
+      const res = await fetch('./daily_reports/report_index.json');
+      if (!res.ok) {
+        throw new Error(`report_index.json을 불러오지 못했습니다. (${res.status})`);
+      }
+      return await res.json();
+    }
+
+    async function loadReportByFile(fileName) {
+      const res = await fetch(`./daily_reports/${fileName}`);
+      if (!res.ok) {
+        throw new Error(`${fileName}을 불러오지 못했습니다. (${res.status})`);
+      }
+      return await res.json();
+    }
+
+    function truncateText(text, maxLength = 700) {
+      if (!text) return "정보 없음";
+      if (text.length <= maxLength) return text;
+      return text.slice(0, maxLength).trim() + "...";
+    }
+
+    function renderSimpleList(containerId, items) {
+      const el = document.getElementById(containerId);
+      el.innerHTML = "";
+
+      if (!items || !items.length) {
+        el.textContent = "정보 없음";
+        return;
+      }
+
+      const ul = document.createElement("ul");
+      ul.className = "simple-list";
+
+      items.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        ul.appendChild(li);
+      });
+
+      el.appendChild(ul);
+    }
+
+    function renderReport(data) {
+      const report = data.report || {};
+      const readable = data.readable_report || {};
+
+      document.title = `Daily Economic Brief | ${data.run_date || ""}`;
+
+      document.getElementById("hero-date").textContent =
+        `${data.run_date || "날짜 정보 없음"} Daily Report · MK RSS 기반`;
+
+      document.getElementById("overview-title").textContent =
+        `${data.run_date || "날짜 정보 없음"} 시장 개요`;
+
+      document.getElementById("market-overview").textContent =
+        truncateText(report.market_overview, 550);
+
+      document.getElementById("macro-analysis").textContent =
+        truncateText(report.macro_analysis, 700);
+
+      document.getElementById("industry-market-trends").textContent =
+        truncateText(report.industry_market_trends, 700);
+
+      document.getElementById("final-narrative-report").textContent =
+        readable.final_narrative_report || "정보 없음";
+
+      document.getElementById("article-digest").textContent =
+        truncateText(readable.article_digest, 1000);
+
+      document.getElementById("rag-integrated-summary").textContent =
+        truncateText(readable.rag_integrated_summary, 700);
+
+      document.getElementById("stat-category-count").textContent =
+        Object.keys(report.category_summary || {}).length || 0;
+
+      document.getElementById("stat-asset-count").textContent =
+        Object.keys(report.asset_outlook || {}).length || 0;
+
+      document.getElementById("stat-risk-count").textContent =
+        (report.top_risks || []).length;
+
+      document.getElementById("stat-checkpoint-count").textContent =
+        (report.actionable_checkpoints || []).length;
+
+      renderSimpleList("cross-themes", (report.cross_category_themes || []).slice(0, 3));
+      renderSimpleList("policy-watch", (report.policy_watchpoints || []).slice(0, 3));
+
+      const categoryGrid = document.getElementById("category-grid");
+      categoryGrid.innerHTML = "";
+      Object.entries(report.category_summary || {}).forEach(([key, value]) => {
+        categoryGrid.innerHTML += `
+          <div class="category-card">
+            <h3>${key}</h3>
+            <p>${truncateText(value || "정보 없음", 220)}</p>
+          </div>
+        `;
+      });
+      if (!Object.keys(report.category_summary || {}).length) {
+        categoryGrid.innerHTML = `
+          <div class="category-card">
+            <h3>정보 없음</h3>
+            <p>표시할 카테고리 요약이 없습니다.</p>
+          </div>
+        `;
+      }
+
+      const assetGrid = document.getElementById("asset-grid");
+      assetGrid.innerHTML = "";
+      Object.entries(report.asset_outlook || {}).forEach(([key, value]) => {
+        assetGrid.innerHTML += `
+          <div class="asset-card">
+            <span class="badge">${key}</span>
+            <h3>${key}</h3>
+            <p>${truncateText(value || "정보 없음", 150)}</p>
+          </div>
+        `;
+      });
+      if (!Object.keys(report.asset_outlook || {}).length) {
+        assetGrid.innerHTML = `
+          <div class="asset-card">
+            <span class="badge">정보 없음</span>
+            <h3>정보 없음</h3>
+            <p>표시할 자산군 정보가 없습니다.</p>
+          </div>
+        `;
+      }
+
+      const riskList = document.getElementById("risk-list");
+      riskList.innerHTML = "";
+      (report.top_risks || []).slice(0, 3).forEach((item, idx) => {
+        riskList.innerHTML += `
+          <div class="risk-card">
+            <b>${String(idx + 1).padStart(2, "0")}. 핵심 리스크</b>
+            <p>${truncateText(item, 140)}</p>
+          </div>
+        `;
+      });
+      if (!(report.top_risks || []).length) {
+        riskList.innerHTML = `
+          <div class="risk-card">
+            <b>정보 없음</b>
+            <p>표시할 리스크가 없습니다.</p>
+          </div>
+        `;
+      }
+
+      const checkpointsList = document.getElementById("checkpoints-list");
+      checkpointsList.innerHTML = "";
+      (report.actionable_checkpoints || []).slice(0, 3).forEach((item, idx) => {
+        checkpointsList.innerHTML += `
+          <div class="watch-card">
+            <h3>체크포인트 ${idx + 1}</h3>
+            <p>${truncateText(item, 150)}</p>
+          </div>
+        `;
+      });
+      if (!(report.actionable_checkpoints || []).length) {
+        checkpointsList.innerHTML = `
+          <div class="watch-card">
+            <h3>정보 없음</h3>
+            <p>표시할 체크포인트가 없습니다.</p>
+          </div>
+        `;
+      }
+    }
+
+    async function initPage() {
+      try {
+        const indexData = await loadReportIndex();
+        const dateList = document.getElementById("report-date-list");
+        dateList.innerHTML = "";
+
+        if (!Array.isArray(indexData) || !indexData.length) {
+          throw new Error("표시할 보고서 목록이 없습니다.");
+        }
+
+        indexData.forEach((item, idx) => {
+          const btn = document.createElement("button");
+          btn.className = "report-date-pill";
+
+          const main = document.createElement("span");
+          main.className = "date-main";
+          main.textContent = item.run_date || "날짜 정보 없음";
+
+          btn.appendChild(main);
+
+          btn.addEventListener("click", async () => {
+            document.querySelectorAll(".report-date-pill").forEach(el => {
+              el.classList.remove("active");
+            });
+            btn.classList.add("active");
+
+            const data = await loadReportByFile(item.file_name);
+            renderReport(data);
+          });
+
+          dateList.appendChild(btn);
+
+          if (idx === 0) {
+            btn.classList.add("active");
+          }
+        });
+
+        const firstFile = indexData[0].file_name;
+        const firstData = await loadReportByFile(firstFile);
+        renderReport(firstData);
+
+      } catch (err) {
+        const box = document.getElementById("error-box");
+        box.style.display = "block";
+        box.textContent = `오류: ${err.message}`;
+        console.error(err);
+      }
+    }
+
+    initPage();
+  </script>
+</body>
+</html>
