@@ -1,0 +1,17 @@
+[
+  {
+    "run_date": "2026-05-02",
+    "file_name": "mk_daily_report_2026-05-02.json",
+    "report_generated_at": "2026-05-02T11:55:13.635314+09:00"
+  },
+  {
+    "run_date": "2026-04-30",
+    "file_name": "mk_daily_report_2026-04-30.json",
+    "report_generated_at": "2026-05-02T11:56:10.682798+09:00"
+  },
+  {
+    "run_date": "2026-04-28",
+    "file_name": "mk_daily_report_2026-04-28.json",
+    "report_generated_at": "2026-05-02T11:57:10.787119+09:00"
+  }
+]
